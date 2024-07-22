@@ -10,5 +10,8 @@ Tesseract
 go.work
 go.work.sum
 testlogfile
+*.log
+*.txt
+images
 
 
