@@ -3,33 +3,55 @@ package screenBox
 import (
 	"fmt"
 
-	"github.com/go-vgo/robotgo"
 	hook "github.com/robotn/gohook"
 )
 
-func DrawBox() (int, int, int, int) {
-	var x1, y1, x2, y2, w, h int
-	fmt.Println("--- Please press ctrl + shift + q to stop hook ---")
-	hook.Register(hook.KeyDown, []string{"q", "ctrl", "shift"}, func(e hook.Event) {
-		fmt.Println("ctrl-shift-q")
+type ScreenBox struct {
+	X1 int
+	Y1 int
+	W  int
+	H  int
+}
+
+func DrawBox() *ScreenBox {
+	newScreenBox := &ScreenBox{X1: 0, Y1: 0}
+	var x2, y2 int
+	fmt.Println("--- Please press Esc to stop hook ---")
+	hook.Register(hook.KeyDown, []string{"esc"}, func(e hook.Event) {
+		fmt.Println("Escaped")
 		hook.End()
 	})
 
 	fmt.Println("--- Please draw rectangle---")
-	if hook.AddMouse("left") {
-		fmt.Println("Left")
-		x1, y1 = robotgo.Location()
-	}
+	hook.Register(hook.MouseHold, []string{}, func(e hook.Event) {
+		if newScreenBox.X1 == 0 && newScreenBox.Y1 == 0 {
+			fmt.Println("Start")
+			newScreenBox.X1 = int(e.X)
+			newScreenBox.Y1 = int(e.Y)
+		}
+	})
 
-	hook.Register(hook.MouseUp, []string{}, func(e hook.Event) {
-		fmt.Printf("Right")
+	hook.Register(hook.MouseDown, []string{}, func(e hook.Event) {
+		fmt.Println("End")
 		x2 = int(e.X)
 		y2 = int(e.Y)
 	})
-	w = x2 - x1
-	h = y2 - y1
 
 	s := hook.Start()
 	<-hook.Process(s)
-	return x1, y1, w, h
+	if newScreenBox.X1 > x2 {
+		newScreenBox.W = newScreenBox.X1 - x2
+		newScreenBox.X1 = x2
+	} else {
+		newScreenBox.W = x2 - newScreenBox.X1
+	}
+
+	if newScreenBox.Y1 > y2 {
+		newScreenBox.H = newScreenBox.Y1 - y2
+		newScreenBox.Y1 = y2
+	} else {
+		newScreenBox.H = y2 - newScreenBox.Y1
+	}
+
+	return newScreenBox
 }
