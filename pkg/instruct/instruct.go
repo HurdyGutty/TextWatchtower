@@ -1,12 +1,21 @@
 package instruct
 
+import (
+	"context"
+)
+
 type Instruct struct {
-	message string
-	state   string
+	message string `json:"message"`
+	state   string `json:"state"`
 }
 
 type InstructionBoard struct {
+	ctx     context.Context
 	Channel chan *Instruct
+}
+
+func (instruct *InstructionBoard) Startup(ctx context.Context) {
+	instruct.ctx = ctx
 }
 
 func NewInstructBoard() *InstructionBoard {
@@ -29,7 +38,7 @@ func (i *InstructionBoard) InstructionError(message string) {
 	i.Channel <- newInstruct
 }
 
-func (i *InstructionBoard) GetNewInstruct() (string, string) {
+func (i *InstructionBoard) GetNewInstruct() *Instruct {
 	instruct := <-i.Channel
-	return instruct.message, instruct.state
+	return instruct
 }
