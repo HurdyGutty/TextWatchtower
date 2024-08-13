@@ -10,6 +10,11 @@ import (
 
 	"encoding/json"
 	"sort"
+
+	"github.com/HurdyGutty/go_OCR/pkg/captureGroup"
+	"github.com/HurdyGutty/go_OCR/pkg/instruct"
+	"github.com/HurdyGutty/go_OCR/pkg/reloadPoint"
+	"github.com/HurdyGutty/go_OCR/pkg/screenBox"
 )
 
 // App struct
@@ -32,6 +37,15 @@ type ImagesByBreed struct {
 	Status  string
 }
 
+type CaptureGroupState struct {
+	group    *captureGroup.CaptureGroup
+	stopChan chan bool
+}
+
+type GroupMap map[int]*CaptureGroupState
+
+var Groups GroupMap
+
 // NewApp creates a new App application struct
 func NewApp() *App {
 	return &App{}
@@ -43,21 +57,40 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func (a *App) GetRandomImageUrl() string {
-	response, err := http.Get("https://dog.ceo/api/breeds/image/random")
+func (a *App) NewCaptureGroup(id int) {
+	newGroup := captureGroup.NewCaptureGroup(id)
+	Groups[id].group = newGroup
+}
+
+func (a *App) AssignReloadButton(id int) {
+	group := Groups[id].group
+	reload := reloadPoint.ReloadPoint()
+	group.AddReloadPoint(reload)
+}
+
+func (a *App) AddNewScreenBox(id int) {
+	group := Groups[id].group
+	box := screenBox.DrawBox()
+	group.AddNewTextBox(box)
+}
+
+func (a *App) StartOverwatch(id int) {
+	groupState := Groups[id]
+	groupState.stopChan = groupState.group.Overwatch()
+}
+
+func (a *App) StopOverwatch(id int) {
+	groupState := Groups[id]
+	groupState.stopChan <- true
+}
+
+func (a *App) DeleteGroup(id int, i instruct.InstructionBoard) int {
+	deletedId, err := Groups[id].group.DeleteCaptureGroup()
 	if err != nil {
-		log.Fatal(err)
+		i.InstructionError(err.Error())
 	}
-
-	responseData, err := io.ReadAll(response.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var data RandomImage
-	json.Unmarshal(responseData, &data)
-
-	return data.Message
+	i.InstructionInfo(fmt.Sprintf("Deleted Group %d", id))
+	return deletedId
 }
 
 func (a *App) GetBreedList() []string {
@@ -83,6 +116,23 @@ func (a *App) GetBreedList() []string {
 	sort.Strings(breeds)
 
 	return breeds
+}
+
+func (a *App) GetRandomImageUrl() string {
+	response, err := http.Get("https://dog.ceo/api/breeds/image/random")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	responseData, err := io.ReadAll(response.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var data RandomImage
+	json.Unmarshal(responseData, &data)
+
+	return data.Message
 }
 
 func (a *App) GetImageUrlsByBreed(breed string) []string {
