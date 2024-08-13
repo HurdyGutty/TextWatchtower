@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"embed"
 
 	"github.com/HurdyGutty/go_OCR/pkg/instruct"
@@ -34,7 +35,10 @@ func main() {
 			DisableFramelessWindowDecorations: true,
 		},
 		WindowStartState: options.Maximised,
-		OnStartup:        app.startup,
+		OnStartup: func(ctx context.Context) {
+			app.startup(ctx)
+			instructBoard.Startup(ctx)
+		},
 		Bind: []interface{}{
 			app,
 			instructBoard,
