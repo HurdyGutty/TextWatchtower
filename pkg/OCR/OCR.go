@@ -6,13 +6,12 @@ import (
 	"log"
 	"os"
 
-	"github.com/HurdyGutty/go_OCR/pkg/helper/logger"
 	"github.com/danlock/gogosseract"
 )
 
 func handleErr(err error) {
 	if err != nil {
-		logger.Error(err)
+		log.Fatal(err.Error())
 	}
 }
 
