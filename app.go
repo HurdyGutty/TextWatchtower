@@ -12,7 +12,6 @@ import (
 	"sort"
 
 	"github.com/HurdyGutty/go_OCR/pkg/captureGroup"
-	"github.com/HurdyGutty/go_OCR/pkg/instruct"
 	"github.com/HurdyGutty/go_OCR/pkg/reloadPoint"
 	"github.com/HurdyGutty/go_OCR/pkg/screenBox"
 )
@@ -43,6 +42,8 @@ type CaptureGroupState struct {
 }
 
 type GroupMap map[int]*CaptureGroupState
+
+type InstructionError func(string)
 
 var Groups GroupMap
 
@@ -84,12 +85,11 @@ func (a *App) StopOverwatch(id int) {
 	groupState.stopChan <- true
 }
 
-func (a *App) DeleteGroup(id int, i instruct.InstructionBoard) int {
+func (a *App) DeleteGroup(id int, i InstructionError) int {
 	deletedId, err := Groups[id].group.DeleteCaptureGroup()
 	if err != nil {
-		i.InstructionError(err.Error())
+		i(err.Error())
 	}
-	i.InstructionInfo(fmt.Sprintf("Deleted Group %d", id))
 	return deletedId
 }
 
