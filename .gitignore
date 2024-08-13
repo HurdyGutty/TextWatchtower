@@ -13,5 +13,8 @@ testlogfile
 *.log
 *.txt
 images
+build/bin
+node_modules
+frontend/dist
 
 

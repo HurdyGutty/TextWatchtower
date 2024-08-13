@@ -2,21 +2,43 @@ package main
 
 import (
 	"embed"
-	"fmt"
 
-	"github.com/HurdyGutty/go_OCR/pkg/screenBox"
+	"github.com/wailsapp/wails/v2"
+	"github.com/wailsapp/wails/v2/pkg/options"
+	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
+	"github.com/wailsapp/wails/v2/pkg/options/windows"
 )
 
-//go:embed Tesseract/tessdata/eng.*
-var trainingData embed.FS
+//go:embed all:frontend/dist
+var assets embed.FS
 
 func main() {
-	x1, y1, w, h := screenBox.DrawBox()
+	// Create an instance of the app structure
+	app := NewApp()
 
-	// image := "images/captureZone1.png"
+	// Create application with options
+	err := wails.Run(&options.App{
+		Title:  "Text Watchtower",
+		Width:  1024,
+		Height: 768,
+		AssetServer: &assetserver.Options{
+			Assets: assets,
+		},
+		Frameless:        true,
+		BackgroundColour: &options.RGBA{R: 255, G: 0, B: 0, A: 0},
+		Windows: &windows.Options{
+			WebviewIsTransparent:              true,
+			WindowIsTranslucent:               true,
+			DisableFramelessWindowDecorations: true,
+		},
+		WindowStartState: options.Maximised,
+		OnStartup:        app.startup,
+		Bind: []interface{}{
+			app,
+		},
+	})
 
-	// text := OCR.ProcessOCR(trainingData, image)
-
-	// println(text)
-	fmt.Println(x1, y1, w, h)
+	if err != nil {
+		println("Error:", err.Error())
+	}
 }
