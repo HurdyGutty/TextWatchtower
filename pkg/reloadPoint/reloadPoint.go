@@ -8,8 +8,8 @@ import (
 )
 
 type MousePoint struct {
-	X int
-	Y int
+	X int `json:"X"`
+	Y int `json:"Y"`
 }
 
 func ReloadPoint() *MousePoint {

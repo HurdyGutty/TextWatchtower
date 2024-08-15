@@ -7,10 +7,10 @@ import (
 )
 
 type ScreenBox struct {
-	X1 int
-	Y1 int
-	W  int
-	H  int
+	X1 int `json:"x"`
+	Y1 int `json:"y"`
+	W  int `json:"w"`
+	H  int `json:"h"`
 }
 
 func DrawBox() *ScreenBox {
