@@ -63,16 +63,18 @@ func (a *App) NewCaptureGroup(id int) {
 	Groups[id].group = newGroup
 }
 
-func (a *App) AssignReloadButton(id int) {
+func (a *App) AssignReloadButton(id int) *reloadPoint.MousePoint {
 	group := Groups[id].group
 	reload := reloadPoint.ReloadPoint()
 	group.AddReloadPoint(reload)
+	return reload
 }
 
-func (a *App) AddNewScreenBox(id int) {
+func (a *App) AddNewScreenBox(id int) *screenBox.ScreenBox {
 	group := Groups[id].group
 	box := screenBox.DrawBox()
 	group.AddNewTextBox(box)
+	return box
 }
 
 func (a *App) StartOverwatch(id int) {
