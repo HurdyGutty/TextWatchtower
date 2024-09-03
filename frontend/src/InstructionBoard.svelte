@@ -19,7 +19,7 @@
 
     onMount(async () => {
         await showMessage()
-        return StopMessaging
+        return StopMessaging()
     })
 </script>
 
@@ -32,6 +32,7 @@
         background-color: aliceblue;
         width: 80%;
         height: 40px;
+        text-align: center;
     }
 
     .info {
