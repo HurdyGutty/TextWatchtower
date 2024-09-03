@@ -45,7 +45,7 @@ type GroupMap map[int]*CaptureGroupState
 
 type InstructionError func(string)
 
-var Groups GroupMap
+var Groups = make(GroupMap)
 
 // NewApp creates a new App application struct
 func NewApp() *App {
@@ -60,7 +60,10 @@ func (a *App) startup(ctx context.Context) {
 
 func (a *App) NewCaptureGroup(id int) {
 	newGroup := captureGroup.NewCaptureGroup(id)
-	Groups[id].group = newGroup
+	Groups[id] = &CaptureGroupState{
+		group:    newGroup,
+		stopChan: make(chan bool),
+	}
 }
 
 func (a *App) AssignReloadButton(id int) *reloadPoint.MousePoint {
