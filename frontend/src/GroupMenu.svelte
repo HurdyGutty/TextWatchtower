@@ -6,6 +6,7 @@
     export let group: Group;
     export let drawCanvas: (group: Group) => void
     console.log("loaded")
+    console.log(group)
 
     async function changeReloadButton(e: Event) {
         e.preventDefault()
@@ -14,6 +15,7 @@
             group.reload = await AssignReloadButton(group.id)
             drawCanvas(group)
         }
+        console.log(group)
         
     }
 
@@ -24,14 +26,14 @@
             group.watchBox = await AddNewScreenBox(group.id)
             drawCanvas(group)            
         }
-
+        console.log(group)
     }
 </script>
 
 <div class="group-menu">
     <button on:click={(e) => changeNewWatchBox(e)}>
         {#if "watchBox" in group}
-        Change this group's watch zone
+        Change watch zone
         {:else}
         Add new watch zone
         {/if}
@@ -39,7 +41,7 @@
 
     <button on:click={(e) => changeReloadButton(e)}>
         {#if "reload" in group}
-        Change this groups's reload button
+        Change reload button
         {:else}
         Add new reload button
         {/if}
@@ -52,11 +54,14 @@
         flex-direction: column;
         gap: 2px;
         position: absolute;
-        top: calc(100% + 2px);
+        top: 100%;
         background-color: grey;
         align-items: start;
+        border-radius: 6px;
+        padding: 3px;
     }
     button {
         all: unset;
+        cursor: pointer;
     }
 </style>
