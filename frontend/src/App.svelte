@@ -6,20 +6,23 @@
   // import Test from "./Test.svelte";
   import { type Group } from "./stores";
   import { onMount } from "svelte";
+  import { drawFunction } from "./drawFn"
 
   let canvas: Canvas
   let drawCanvasFn: (group: Group) => void
 
   onMount(() => {
     drawCanvasFn = canvas.drawCanvas
+    drawFunction.set(drawCanvasFn)
   })
+
 
 </script>
 
 <div>
   <Title/>
   <InstructionBoard/>
-  <GroupContainer drawFn={drawCanvasFn}/>
+  <GroupContainer/>
   <Canvas bind:this={canvas}/>
   <!-- <Test drawCanvasFn={drawCanvasFn}/> -->
 </div>
