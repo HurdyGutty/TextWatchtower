@@ -17,6 +17,7 @@
 
     export function drawCanvas(group: Group) {
         clearCanvas()
+        console.log(elementRect)
         if ("watchBox" in group){
             c.strokeRect(group.watchBox.x - elementRect.left, group.watchBox.y - elementRect.top, group.watchBox.w, group.watchBox.h)
         }
@@ -36,7 +37,7 @@
 <style>
     canvas {
         border: 1px solid black;
-        margin: 3rem;
+        margin-top: 3.5rem;
         width: 80vw;
     }
 </style>
