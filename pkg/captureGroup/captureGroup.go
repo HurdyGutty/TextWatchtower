@@ -27,6 +27,7 @@ type ScreenBoxText struct {
 func (textBox *ScreenBoxText) getNewText(imageName string) string {
 	newImagePath := screenshot.CreateImagePath(imageName)
 	screenshot.TakeScreenShot(textBox.ScreenBox.X1, textBox.ScreenBox.Y1, textBox.ScreenBox.W, textBox.ScreenBox.H, newImagePath)
+	fmt.Printf("%+v\n", TrainingData)
 	newText := OCR.ProcessOCR(TrainingData, newImagePath)
 	return newText
 }
@@ -37,11 +38,10 @@ func (textBox *ScreenBoxText) isNewText(newText string) bool {
 	} else {
 		newText = strings.TrimRight(newText, "\n")
 	}
+	fmt.Printf("New text: %s Old text: %s", newText, textBox.Text)
 
-	if strings.Compare(newText, textBox.Text) == 0 {
-		return false
-	}
-	return true
+	return strings.Compare(newText, textBox.Text) != 0
+
 }
 
 func (textBox *ScreenBoxText) changeText(newText string) {
