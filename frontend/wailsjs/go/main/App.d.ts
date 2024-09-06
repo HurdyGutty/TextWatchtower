@@ -10,12 +10,6 @@ export function AssignReloadButton(arg1:number):Promise<reloadPoint.MousePoint>;
 
 export function DeleteGroup(arg1:number,arg2:main.InstructionError):Promise<number>;
 
-export function GetBreedList():Promise<Array<string>>;
-
-export function GetImageUrlsByBreed(arg1:string):Promise<Array<string>>;
-
-export function GetRandomImageUrl():Promise<string>;
-
 export function NewCaptureGroup(arg1:number):Promise<void>;
 
 export function StartOverwatch(arg1:number):Promise<void>;

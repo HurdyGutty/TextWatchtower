@@ -14,18 +14,6 @@ export function DeleteGroup(arg1, arg2) {
   return window['go']['main']['App']['DeleteGroup'](arg1, arg2);
 }
 
-export function GetBreedList() {
-  return window['go']['main']['App']['GetBreedList']();
-}
-
-export function GetImageUrlsByBreed(arg1) {
-  return window['go']['main']['App']['GetImageUrlsByBreed'](arg1);
-}
-
-export function GetRandomImageUrl() {
-  return window['go']['main']['App']['GetRandomImageUrl']();
-}
-
 export function NewCaptureGroup(arg1) {
   return window['go']['main']['App']['NewCaptureGroup'](arg1);
 }
