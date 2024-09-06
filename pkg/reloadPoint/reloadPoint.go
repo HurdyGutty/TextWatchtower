@@ -14,15 +14,16 @@ type MousePoint struct {
 
 func ReloadPoint() *MousePoint {
 	point := new(MousePoint)
-	s := hook.Start()
+
 	fmt.Println("--- Please press Esc to stop hook ---")
 	hook.Register(hook.KeyDown, []string{"esc"}, func(e hook.Event) {
 		fmt.Println("Escaped")
 		hook.End()
 	})
-	if hook.AddMouse("left") {
+	hook.Register(hook.MouseDown, []string{}, func(e hook.Event) {
 		point.X, point.Y = robotgo.Location()
-	}
+	})
+	s := hook.Start()
 	<-hook.Process(s)
 	return point
 }
