@@ -19,7 +19,6 @@
 
     onMount(async () => {
         await showMessage()
-        return StopMessaging()
     })
 </script>
 
