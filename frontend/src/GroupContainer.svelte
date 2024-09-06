@@ -3,10 +3,10 @@
     import { InstructionAlert, InstructionError, InstructionInfo } from "../wailsjs/go/instruct/instructionBoard.js";
     import { type Group, groupsMap } from "./stores.js"
     import GroupMenu from "./GroupMenu.svelte";
+    import WatchGroup from "./WatchGroup.svelte";
     let startId = 0;
     let numberQueue = [1,2,3,4,5,6]
     let groups: Map<number, Group>;
-    export let drawFn: (group: Group) => void;
 
     groupsMap.subscribe((value) => {
         groups = value;
@@ -52,26 +52,7 @@
 
 <div id="group-container">
     {#each Array.from(groups.values()) as group}
-        <div class={"group " + group.id.toString()} 
-            on:click={() => drawFn(group)}
-            on:keyup={() => drawFn(group)}
-            role="button"
-            tabindex="0">
-            <span>Group {group.id}</span>
-            {#if startId !== group.id}
-            <button  on:click={(e) => startOverWatch(e, group.id)}>
-                <img src="./src/assets/images/play-button.svg" alt="Start"/>
-            </button>
-            {:else}
-            <button on:click={(e) => stopOverwatch(e, group.id)}>
-                <img src="./src/assets/images/stop-button.svg" alt="Stop"/>
-            </button>
-            {/if}
-            <button on:click={(e) => deleteGroup(e, group.id)}>
-                <img src="./src/assets/images/remove.png" alt ="Delete" />
-            </button>
-            <GroupMenu group={group} drawCanvas={drawFn}></GroupMenu>
-        </div>
+        <WatchGroup group={group} deleteGroup={deleteGroup}></WatchGroup>
     {/each}
     {#if groups.size < 6}
         <button class="group 0" on:click={(e) => addNewGroup(e)}>+</button>
@@ -92,21 +73,13 @@
         background-color: aliceblue;
         border-radius: 16px;
         padding: 8px;
-        width: 20vh;
+        width: calc(20vh + 6px);
         display: flex;
         align-items: center;
         position: relative;
         gap: 3px;
         text-align: center;
-    }
-    .\30 {
         justify-content: center;
-    }
-    .group span {
-        flex-grow: 0.8;
-    }
-    img {
-        max-height: 1.5rem;
     }
     #group-container {
         display: flex;
