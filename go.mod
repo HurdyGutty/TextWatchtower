@@ -5,6 +5,7 @@ go 1.21.4
 require (
 	github.com/danlock/gogosseract v0.0.11-0ad3421
 	github.com/go-vgo/robotgo v0.110.1
+	github.com/joho/godotenv v1.5.1
 	github.com/robotn/gohook v0.41.0
 	github.com/wailsapp/wails/v2 v2.9.1
 )

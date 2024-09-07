@@ -4,9 +4,13 @@ import (
 	"context"
 	"embed"
 	"io/fs"
+	"log"
+	"os"
 
 	"github.com/HurdyGutty/go_OCR/pkg/captureGroup"
 	"github.com/HurdyGutty/go_OCR/pkg/instruct"
+	"github.com/HurdyGutty/go_OCR/pkg/telegram"
+	"github.com/joho/godotenv"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
@@ -37,6 +41,12 @@ func getAllFilenames(efs *embed.FS) (files []string, err error) {
 
 func main() {
 	captureGroup.TrainingData = tesseract
+	errorLoad := godotenv.Load()
+	if errorLoad != nil {
+		log.Fatal("Error loading .env file")
+	}
+	telegram.Token = os.Getenv("TELEGRAM_BOT_TOKEN")
+	telegram.Chat_ID = os.Getenv("CHAT_ID")
 
 	// Create an instance of the app structure
 	app := NewApp()
