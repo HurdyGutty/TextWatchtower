@@ -15,12 +15,12 @@ func getURL() string {
 	return fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", Token)
 }
 
-func SendMessage(time time.Time, message string) (bool, error) {
+func SendMessage(timer time.Time, message string) (bool, error) {
 	var err error
 	var response *http.Response
 	url := getURL()
 
-	text := time.Format("17:00:00 24/02/2016") + ":" + message
+	text := timer.Format(time.RFC850) + ": " + message
 
 	body, _ := json.Marshal(map[string]string{
 		"chat_id": Chat_ID,
