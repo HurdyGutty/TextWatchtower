@@ -54,7 +54,7 @@ func (a *App) NewCaptureGroup(id int) {
 	newGroup := captureGroup.NewCaptureGroup(id)
 	Groups[id] = &CaptureGroupState{
 		group:    newGroup,
-		stopChan: make(chan bool),
+		stopChan: nil,
 	}
 }
 
