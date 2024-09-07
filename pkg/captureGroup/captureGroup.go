@@ -19,6 +19,15 @@ import (
 
 var TrainingData embed.FS
 
+func trimText(text string) string {
+	if runtime.GOOS == "windows" {
+		text = strings.TrimRight(text, "\r\n")
+	} else {
+		text = strings.TrimRight(text, "\n")
+	}
+	return text
+}
+
 type ScreenBoxText struct {
 	ScreenBox *screenBox.ScreenBox
 	Text      string
@@ -29,16 +38,13 @@ func (textBox *ScreenBoxText) getNewText(imageName string) string {
 	screenshot.TakeScreenShot(textBox.ScreenBox.X1, textBox.ScreenBox.Y1, textBox.ScreenBox.W, textBox.ScreenBox.H, newImagePath)
 	fmt.Printf("%+v\n", TrainingData)
 	newText := OCR.ProcessOCR(TrainingData, newImagePath)
+	newText = trimText(newText)
 	return newText
 }
 
 func (textBox *ScreenBoxText) isNewText(newText string) bool {
-	if runtime.GOOS == "windows" {
-		newText = strings.TrimRight(newText, "\r\n")
-	} else {
-		newText = strings.TrimRight(newText, "\n")
-	}
-	fmt.Printf("New text: %s Old text: %s", newText, textBox.Text)
+	newText = trimText(newText)
+	fmt.Printf("### New text ### \n %s \n ### Old text ### \n %s \n", newText, textBox.Text)
 
 	return strings.Compare(newText, textBox.Text) != 0
 
@@ -80,9 +86,8 @@ func (group *CaptureGroup) DeleteCaptureGroup() (int, error) {
 }
 
 func (group *CaptureGroup) Overwatch() chan bool {
-	stop := make(chan bool)
 	ticker := time.NewTicker(15000 * time.Millisecond)
-	done := make(chan bool)
+	done := make(chan bool, 1)
 	groupPath := "group" + strconv.Itoa(group.Id) + "/"
 	err := os.MkdirAll("images/"+groupPath, 0750)
 	if err != nil {
@@ -93,6 +98,8 @@ func (group *CaptureGroup) Overwatch() chan bool {
 		for {
 			select {
 			case <-done:
+				ticker.Stop()
+				fmt.Printf("Group %d has stop\n", group.Id)
 				return
 			case t := <-ticker.C:
 				for i, textBox := range group.TextBoxes {
@@ -104,18 +111,13 @@ func (group *CaptureGroup) Overwatch() chan bool {
 							log.Fatal(err)
 						}
 						if sent {
-							textBox.changeText(newText)
+							group.TextBoxes[i].changeText(newText)
+							fmt.Println("Sent")
 						}
 					}
 				}
 			}
 		}
 	}()
-
-	if <-stop {
-		ticker.Stop()
-		done <- true
-		fmt.Printf("Group %d has stop/n", group.Id)
-	}
-	return stop
+	return done
 }
