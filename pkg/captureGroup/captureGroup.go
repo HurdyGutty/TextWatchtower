@@ -116,6 +116,7 @@ func (group *CaptureGroup) Overwatch() chan bool {
 						}
 					}
 				}
+				group.Reload.ReloadPage()
 			}
 		}
 	}()

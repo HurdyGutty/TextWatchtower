@@ -2,6 +2,7 @@ package reloadPoint
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/go-vgo/robotgo"
 	hook "github.com/robotn/gohook"
@@ -26,4 +27,11 @@ func ReloadPoint() *MousePoint {
 	s := hook.Start()
 	<-hook.Process(s)
 	return point
+}
+
+func (point *MousePoint) ReloadPage() {
+	robotgo.Move(point.X, point.Y)
+	robotgo.Click("left")
+	time.Sleep(50 * time.Millisecond)
+	robotgo.Click("left")
 }
