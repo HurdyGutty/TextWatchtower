@@ -5,8 +5,8 @@ import (
 )
 
 type Instruct struct {
-	message string `json:"message"`
-	state   string `json:"state"`
+	Message string `json:"message"`
+	State   string `json:"state"`
 }
 
 type InstructionBoard struct {
@@ -14,27 +14,29 @@ type InstructionBoard struct {
 	Channel chan *Instruct
 }
 
-func (instruct *InstructionBoard) Startup(ctx context.Context) {
-	instruct.ctx = ctx
+func (i *InstructionBoard) Startup(ctx context.Context) {
+	i.ctx = ctx
 }
 
 func NewInstructBoard() *InstructionBoard {
-	var InstructChannel chan *Instruct
+	instructWelcome := &Instruct{Message: "Welcome to Text Watchtower! Let's start by creating a group", State: "info"}
+	InstructChannel := make(chan *Instruct, 1)
+	InstructChannel <- instructWelcome
 	return &InstructionBoard{Channel: InstructChannel}
 }
 
 func (i *InstructionBoard) InstructionInfo(message string) {
-	newInstruct := &Instruct{message: message, state: "info"}
+	newInstruct := &Instruct{Message: message, State: "info"}
 	i.Channel <- newInstruct
 }
 
 func (i *InstructionBoard) InstructionAlert(message string) {
-	newInstruct := &Instruct{message: message, state: "alert"}
+	newInstruct := &Instruct{Message: message, State: "alert"}
 	i.Channel <- newInstruct
 }
 
 func (i *InstructionBoard) InstructionError(message string) {
-	newInstruct := &Instruct{message: message, state: "error"}
+	newInstruct := &Instruct{Message: message, State: "error"}
 	i.Channel <- newInstruct
 }
 
