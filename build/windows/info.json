@@ -1,15 +1,15 @@
 {
 	"fixed": {
-		"file_version": "{{.Info.ProductVersion}}"
+		"file_version": "0.1"
 	},
 	"info": {
 		"0000": {
-			"ProductVersion": "{{.Info.ProductVersion}}",
-			"CompanyName": "{{.Info.CompanyName}}",
-			"FileDescription": "{{.Info.ProductName}}",
-			"LegalCopyright": "{{.Info.Copyright}}",
-			"ProductName": "{{.Info.ProductName}}",
-			"Comments": "{{.Info.Comments}}"
+			"ProductVersion": "0.1.0",
+			"CompanyName": "Hurdy Co.",
+			"FileDescription": "Watch changes of texts in websites",
+			"LegalCopyright": "@ 2024 Hurdy Corporation. All rights reserved",
+			"ProductName": "Text Watchtower",
+			"Comments": "Personal use only"
 		}
 	}
 }
