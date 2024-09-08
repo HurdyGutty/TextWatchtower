@@ -74,6 +74,7 @@
         border-radius: 16px;
         padding: 8px;
         width: calc(20vh + 6px);
+        min-height: 44px;
         display: flex;
         align-items: center;
         position: relative;
