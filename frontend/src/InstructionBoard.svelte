@@ -1,29 +1,37 @@
-<script>
-    import { GetNewInstruct } from "../wailsjs/go/instruct/instructionBoard.js"
-    import { onMount, tick } from 'svelte'
-    let message = "Welcome to Text Watchtower! Let's start by creating a group"
-    let state = "info"
-    async function showMessage() {
-        await tick();
-        GetNewInstruct().then((result) => {
-            message = result.message;
-            state = result.state;
-        })
-        .catch((err) => {
-            message = "Error in the board. Please wait"
-        })
-    }
-    function StopMessaging() {
-        message = "Board stop"
+<script lang="ts">
+    import { instruct } from "../wailsjs/go/models";
+    import { GetNewInstruct } from "../wailsjs/go/instruct/instructionBoard"
+
+
+    async function fetchUpdateBoard() {
+        const res = await GetNewInstruct();
+        console.log(res)
+        if (typeof res !== "undefined") {
+            return res
+        } else {
+            return {
+                message: "Error in the board. Please wait",
+                state: "alert",
+            } as instruct.Instruct
+        }
     }
 
-    onMount(async () => {
-        await showMessage()
-    })
+    let data = fetchUpdateBoard()
+
+    export function updateInstructionBoard() {
+        data = fetchUpdateBoard()
+    }
+
 </script>
 
 <div id="board">
-    <h3 class={state}>{message}</h3>
+    {#await data}
+        <h3 class="info">Waiting</h3>
+    {:then data}
+        <h3 class={data.state}>{data.message}</h3>
+    {:catch error}
+        <h3 class="error">Error in the board. Please wait</h3>
+    {/await}
 </div>
 
 <style>
@@ -32,6 +40,10 @@
         width: 80%;
         height: 40px;
         text-align: center;
+    }
+
+    h3 {
+        line-height: 40px
     }
 
     .info {
