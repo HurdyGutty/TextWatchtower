@@ -11,6 +11,7 @@ import (
 	"github.com/HurdyGutty/go_OCR/pkg/instruct"
 	"github.com/HurdyGutty/go_OCR/pkg/telegram"
 	"github.com/joho/godotenv"
+	"github.com/lxn/win"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
@@ -55,8 +56,8 @@ func main() {
 	// Create application with options
 	err := wails.Run(&options.App{
 		Title:  "Text Watchtower",
-		Width:  1024,
-		Height: 768,
+		Width:  int(win.GetSystemMetrics(win.SM_CXSCREEN)),
+		Height: int(win.GetSystemMetrics(win.SM_CYSCREEN)),
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},

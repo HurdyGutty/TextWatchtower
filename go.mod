@@ -6,6 +6,7 @@ require (
 	github.com/danlock/gogosseract v0.0.11-0ad3421
 	github.com/go-vgo/robotgo v0.110.1
 	github.com/joho/godotenv v1.5.1
+	github.com/lxn/win v0.0.0-20210218163916-a377121e959e
 	github.com/robotn/gohook v0.41.0
 	github.com/wailsapp/wails/v2 v2.9.1
 )
@@ -28,7 +29,6 @@ require (
 	github.com/leaanthony/slicer v1.6.0 // indirect
 	github.com/leaanthony/u v1.1.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20240513124658-fba389f38bae // indirect
-	github.com/lxn/win v0.0.0-20210218163916-a377121e959e // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/otiai10/gosseract v2.2.1+incompatible // indirect
