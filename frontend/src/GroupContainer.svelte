@@ -1,43 +1,42 @@
 <script lang="ts">
-    import { StartOverwatch, StopOverwatch, NewCaptureGroup, DeleteGroup } from "../wailsjs/go/main/App.js";
+    import { NewCaptureGroup, DeleteGroup } from "../wailsjs/go/main/App.js";
     import { InstructionAlert, InstructionError, InstructionInfo } from "../wailsjs/go/instruct/instructionBoard.js";
     import { type Group, groupsMap } from "./stores.js"
-    import GroupMenu from "./GroupMenu.svelte";
     import WatchGroup from "./WatchGroup.svelte";
-    let startId = 0;
+    import { updateBoard, type UpdateBoardFn } from "./instructStore.js";
     let numberQueue = [1,2,3,4,5,6]
     let groups: Map<number, Group>;
 
     groupsMap.subscribe((value) => {
         groups = value;
     })
-    function startOverWatch(e: Event, id: number) {
-        e.preventDefault();
-        StartOverwatch(id);
-        startId = id;
-    }
 
-    function stopOverwatch(e: Event, id: number) {
-        e.preventDefault();
-        StopOverwatch(id);
-        startId = 0;
-    }
+    let updateInstructBoard: UpdateBoardFn
+
+    updateBoard.subscribe((value) => {
+        updateInstructBoard = value
+    })
+
     function addNewGroup(e: Event) {
         e.preventDefault();
         if (numberQueue.length === 0) {
             InstructionAlert("Maximum of 6 groups only")
+            updateInstructBoard()
             return;
         }
         let id = numberQueue.shift()
         numberQueue = numberQueue
         NewCaptureGroup(id);
         groups = groups.set(id, {id})
+        InstructionInfo("Added a new group")
+        updateInstructBoard()
     }
 
     async function deleteGroup(e: Event, id: number) {
         e.preventDefault();
         if (groups.size === 0) {
             InstructionError("There is no more group to delete")
+            updateInstructBoard()
             return;
         }
         numberQueue.unshift(id)
@@ -46,6 +45,7 @@
         groups = groups
         let deletedId = await DeleteGroup(id, InstructionError)
         InstructionInfo(`Delete Group ${deletedId}`)
+        updateInstructBoard()
     }
 
 </script>
@@ -81,6 +81,7 @@
         gap: 3px;
         text-align: center;
         justify-content: center;
+        font-weight: bold;
     }
     #group-container {
         display: flex;

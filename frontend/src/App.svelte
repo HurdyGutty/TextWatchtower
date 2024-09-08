@@ -7,13 +7,18 @@
   import { type Group } from "./stores";
   import { onMount } from "svelte";
   import { drawFunction } from "./drawFn"
+  import { updateBoard } from "./instructStore"
 
   let canvas: Canvas
+  let board: InstructionBoard
   let drawCanvasFn: (group: Group) => void
+  let updateBoardFn: () => void
 
   onMount(() => {
     drawCanvasFn = canvas.drawCanvas
     drawFunction.set(drawCanvasFn)
+    updateBoardFn = board.updateInstructionBoard
+    updateBoard.set(updateBoardFn)
   })
 
 
@@ -21,7 +26,7 @@
 
 <div>
   <Title/>
-  <InstructionBoard/>
+  <InstructionBoard bind:this={board}/>
   <GroupContainer/>
   <Canvas bind:this={canvas}/>
   <!-- <Test drawCanvasFn={drawCanvasFn}/> -->
@@ -29,7 +34,6 @@
 <style>
   div {
     display: flex;
-    background-color: rgba(170, 12, 10, 0.4);
     height: 100vh;
     flex-direction: column;
     align-items: center;
