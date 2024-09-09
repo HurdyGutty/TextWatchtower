@@ -41,7 +41,7 @@
     tabindex="0">
         <span>Group {group.id}</span>
         <button on:click={toggleMenu}>
-            <img src="./src/assets/images/menu.svg" alt="Menu"/>
+            <img src="/assets/images/menu.svg" alt="Menu"/>
         </button>
 
         {#if play}
@@ -49,18 +49,18 @@
             startOverWatch(e, group.id);
             togglePlay();
             }}>
-            <img src="./src/assets/images/play-button.svg" alt="Start"/>
+            <img src="/assets/images/play-button.svg" alt="Start"/>
         </button>
         {:else}
         <button on:click={(e) => {
             stopOverwatch(e, group.id);
             togglePlay();
         }}>
-            <img src="./src/assets/images/stop-button.svg" alt="Stop"/>
+            <img src="/assets/images/stop-button.svg" alt="Stop"/>
         </button>
         {/if}
         <button on:click={(e) => deleteGroup(e, group.id)}>
-            <img src="./src/assets/images/remove.png" alt ="Delete" />
+            <img src="/assets/images/remove.png" alt ="Delete" />
         </button>
         {#if showMenu}
         <GroupMenu group={group} drawCanvas={drawFn}></GroupMenu>

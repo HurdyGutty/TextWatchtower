@@ -3,7 +3,7 @@
 </script>
 
 <div id="title">
-    <img src="./src/assets/images/watchtower.png" alt="Program icon"/>
+    <img src="/assets/images/watchtower.png" alt="Program icon"/>
     <h1>Text Watchtower</h1>
 </div>
 
