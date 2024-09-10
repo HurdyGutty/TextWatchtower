@@ -100,7 +100,7 @@ func (group *CaptureGroup) Overwatch() chan bool {
 			select {
 			case <-done:
 				ticker.Stop()
-				fmt.Printf("Group %d has stop\n", group.Id)
+				InstructionBoard.InstructionAlert(fmt.Sprintf("Group %d has stop", group.Id))
 				return
 			case t := <-ticker.C:
 				for i, textBox := range group.TextBoxes {
@@ -113,7 +113,7 @@ func (group *CaptureGroup) Overwatch() chan bool {
 						}
 						if sent {
 							group.TextBoxes[i].changeText(newText)
-							fmt.Println("Sent")
+							InstructionBoard.InstructionAlert(fmt.Sprintf("Group %d changes have been sent", group.Id))
 						}
 					}
 				}
