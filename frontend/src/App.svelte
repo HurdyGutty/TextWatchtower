@@ -35,6 +35,7 @@
   div {
     display: flex;
     height: 100vh;
+    background-color: rgba(255, 99, 71, 0.3);
     flex-direction: column;
     align-items: center;
     gap: 5px;
