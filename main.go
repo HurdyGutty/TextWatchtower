@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/HurdyGutty/go_OCR/pkg/OCR"
 	"github.com/HurdyGutty/go_OCR/pkg/captureGroup"
 	"github.com/HurdyGutty/go_OCR/pkg/instruct"
 	"github.com/HurdyGutty/go_OCR/pkg/telegram"
@@ -35,6 +36,8 @@ func main() {
 	// Create an instance of the app structure
 	app := NewApp()
 	instructBoard := instruct.NewInstructBoard()
+	captureGroup.InstructionBoard = instructBoard
+	OCR.InstructionBoard = instructBoard
 
 	// Create application with options
 	err := wails.Run(&options.App{

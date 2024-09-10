@@ -3,7 +3,6 @@ package captureGroup
 import (
 	"embed"
 	"fmt"
-	"log"
 	"os"
 	"runtime"
 	"strconv"
@@ -11,6 +10,7 @@ import (
 	"time"
 
 	"github.com/HurdyGutty/go_OCR/pkg/OCR"
+	"github.com/HurdyGutty/go_OCR/pkg/instruct"
 	"github.com/HurdyGutty/go_OCR/pkg/reloadPoint"
 	"github.com/HurdyGutty/go_OCR/pkg/screenBox"
 	"github.com/HurdyGutty/go_OCR/pkg/screenshot"
@@ -18,6 +18,7 @@ import (
 )
 
 var TrainingData embed.FS
+var InstructionBoard *instruct.InstructionBoard
 
 func trimText(text string) string {
 	if runtime.GOOS == "windows" {
@@ -91,7 +92,7 @@ func (group *CaptureGroup) Overwatch() chan bool {
 	groupPath := "group" + strconv.Itoa(group.Id) + "/"
 	err := os.MkdirAll("images/"+groupPath, 0750)
 	if err != nil {
-		log.Fatalf("Can't make capture group %d", group.Id)
+		InstructionBoard.InstructionError("Can't make new capture group")
 	}
 
 	go func() {
@@ -108,7 +109,7 @@ func (group *CaptureGroup) Overwatch() chan bool {
 					if textBox.isNewText(newText) {
 						sent, err := telegram.SendMessage(t, newText)
 						if err != nil {
-							log.Fatal(err)
+							InstructionBoard.InstructionError("Can't sent telegram messages")
 						}
 						if sent {
 							group.TextBoxes[i].changeText(newText)
