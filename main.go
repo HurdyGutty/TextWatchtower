@@ -54,7 +54,7 @@ func main() {
 			WindowIsTranslucent:               true,
 			DisableFramelessWindowDecorations: true,
 		},
-		WindowStartState: options.Maximised,
+		WindowStartState: options.Fullscreen,
 		OnStartup: func(ctx context.Context) {
 			app.startup(ctx)
 			instructBoard.Startup(ctx)
