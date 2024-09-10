@@ -37,9 +37,10 @@
 <style>
     #board {
         background-color: aliceblue;
-        width: 80%;
         height: 40px;
         text-align: center;
+        padding: 8px;
+        border-radius: 4px;
     }
 
     h3 {
