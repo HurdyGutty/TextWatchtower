@@ -35,7 +35,10 @@ func main() {
 
 	// Create an instance of the app structure
 	app := NewApp()
+	app.Width = int(win.GetSystemMetrics(win.SM_CXSCREEN))
+	app.Height = int(win.GetSystemMetrics(win.SM_CYSCREEN))
 	instructBoard := instruct.NewInstructBoard()
+	app.instructBoard = instructBoard
 	captureGroup.InstructionBoard = instructBoard
 	OCR.InstructionBoard = instructBoard
 

@@ -4,13 +4,17 @@ import (
 	"context"
 
 	"github.com/HurdyGutty/go_OCR/pkg/captureGroup"
+	"github.com/HurdyGutty/go_OCR/pkg/instruct"
 	"github.com/HurdyGutty/go_OCR/pkg/reloadPoint"
 	"github.com/HurdyGutty/go_OCR/pkg/screenBox"
 )
 
 // App struct
 type App struct {
-	ctx context.Context
+	ctx           context.Context
+	instructBoard *instruct.InstructionBoard
+	Width         int `json:"width"`
+	Height        int `json:"height"`
 }
 
 type RandomImage struct {
@@ -82,10 +86,18 @@ func (a *App) StopOverwatch(id int) {
 	groupState.stopChan <- true
 }
 
-func (a *App) DeleteGroup(id int, i InstructionError) int {
+func (a *App) DeleteGroup(id int) int {
 	deletedId, err := Groups[id].group.DeleteCaptureGroup()
 	if err != nil {
-		i(err.Error())
+		a.instructBoard.InstructionError(err.Error())
 	}
 	return deletedId
+}
+
+func (a *App) GetAppWidth() int {
+	return a.Width
+}
+
+func (a *App) GetAppHeight() int {
+	return a.Height
 }
