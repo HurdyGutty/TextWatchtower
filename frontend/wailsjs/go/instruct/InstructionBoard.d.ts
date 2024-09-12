@@ -11,4 +11,6 @@ export function InstructionError(arg1:string):Promise<void>;
 
 export function InstructionInfo(arg1:string):Promise<void>;
 
+export function ReceiveInstruct():Promise<instruct.Instruct>;
+
 export function Startup(arg1:context.Context):Promise<void>;

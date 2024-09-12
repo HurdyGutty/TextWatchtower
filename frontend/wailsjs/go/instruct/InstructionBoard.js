@@ -18,6 +18,10 @@ export function InstructionInfo(arg1) {
   return window['go']['instruct']['InstructionBoard']['InstructionInfo'](arg1);
 }
 
+export function ReceiveInstruct() {
+  return window['go']['instruct']['InstructionBoard']['ReceiveInstruct']();
+}
+
 export function Startup(arg1) {
   return window['go']['instruct']['InstructionBoard']['Startup'](arg1);
 }

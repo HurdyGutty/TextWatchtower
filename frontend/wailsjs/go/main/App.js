@@ -10,8 +10,16 @@ export function AssignReloadButton(arg1) {
   return window['go']['main']['App']['AssignReloadButton'](arg1);
 }
 
-export function DeleteGroup(arg1, arg2) {
-  return window['go']['main']['App']['DeleteGroup'](arg1, arg2);
+export function DeleteGroup(arg1) {
+  return window['go']['main']['App']['DeleteGroup'](arg1);
+}
+
+export function GetAppHeight() {
+  return window['go']['main']['App']['GetAppHeight']();
+}
+
+export function GetAppWidth() {
+  return window['go']['main']['App']['GetAppWidth']();
 }
 
 export function NewCaptureGroup(arg1) {
