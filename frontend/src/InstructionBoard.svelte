@@ -1,26 +1,10 @@
 <script lang="ts">
     import { instruct } from "../wailsjs/go/models";
-    import { GetNewInstruct } from "../wailsjs/go/instruct/instructionBoard"
+    import store from "./instructStore"
 
+    let data: Promise<instruct.Instruct>
 
-    async function fetchUpdateBoard() {
-        const res = await GetNewInstruct();
-        console.log(res)
-        if (typeof res !== "undefined") {
-            return res
-        } else {
-            return {
-                message: "Error in the board. Please wait",
-                state: "alert",
-            } as instruct.Instruct
-        }
-    }
-
-    let data = fetchUpdateBoard()
-
-    export function updateInstructionBoard() {
-        data = fetchUpdateBoard()
-    }
+    store.subscribe((value) => data = value)
 
 </script>
 
@@ -28,7 +12,9 @@
     {#await data}
         <h3 class="info">Waiting</h3>
     {:then data}
-        <h3 class={data.state}>{data.message}</h3>
+        {#key [data.state, data.message]}
+            <h3 class={data.state}>{data.message}</h3>
+        {/key}
     {:catch error}
         <h3 class="error">Error in the board. Please wait</h3>
     {/await}
@@ -56,7 +42,7 @@
     }
 
     .alert {
-        color: yellow
+        color: orange
     }
 
 </style>

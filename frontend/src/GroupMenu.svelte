@@ -2,25 +2,18 @@
     import { AddNewScreenBox, AssignReloadButton } from "../wailsjs/go/main/App";
     import { type Group } from "./stores";
     import { InstructionInfo } from "../wailsjs/go/instruct/instructionBoard"
-    import { type UpdateBoardFn, updateBoard} from "./instructStore"
 
     export let group: Group;
     export let drawCanvas: (group: Group) => void
-    let updateInstructBoard: UpdateBoardFn
 
-    updateBoard.subscribe((value) => {
-        updateInstructBoard = value
-    })
 
     async function changeReloadButton(e: Event) {
         e.preventDefault()
         if ("id" in group){
             InstructionInfo("Please click at the button then press Esc when done")
-            updateInstructBoard()
             group.reload = await AssignReloadButton(group.id)
             drawCanvas(group)
             InstructionInfo("Reload button has changed")
-            updateInstructBoard()
         }
     }
 
@@ -28,11 +21,9 @@
         e.preventDefault()
         if ("id" in group) {
             InstructionInfo("Draw a rectangle in the box below then press Esc when done")
-            updateInstructBoard()
             group.watchBox = await AddNewScreenBox(group.id)
             drawCanvas(group)
             InstructionInfo("Changed watch window for this group")
-            updateInstructBoard()
         }
     }
 </script>

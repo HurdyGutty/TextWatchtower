@@ -7,7 +7,6 @@
   import { type Group } from "./stores";
   import { onMount } from "svelte";
   import { drawFunction } from "./drawFn"
-  import { updateBoard } from "./instructStore"
 
   let canvas: Canvas
   let board: InstructionBoard
@@ -18,7 +17,6 @@
     drawCanvasFn = canvas.drawCanvas
     drawFunction.set(drawCanvasFn)
     updateBoardFn = board.updateInstructionBoard
-    updateBoard.set(updateBoardFn)
   })
 
 

@@ -1,5 +1,26 @@
 import { writable } from 'svelte/store';
+import { ReceiveInstruct } from "../wailsjs/go/instruct/instructionBoard"
+import { instruct } from '../wailsjs/go/models';
 
-export type UpdateBoardFn = () => void;
+let instructStruct: Promise<instruct.Instruct>
 
-export const updateBoard = writable(() => {});
+function fetchInstruct() {
+    instructStruct = ReceiveInstruct()
+}
+
+fetchInstruct()
+
+const messageStore = writable(instructStruct, () => {
+    let interval = setInterval(() => {
+        messageStore.update((value) => (value = ReceiveInstruct()))
+    }, 2000)
+
+    return () => {
+        clearInterval(interval)
+    }
+});
+
+export default {
+	subscribe: messageStore.subscribe,
+}
+
