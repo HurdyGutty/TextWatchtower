@@ -1,7 +1,6 @@
 <script lang="ts">
-    import { onMount, tick } from "svelte";
+    import { onMount } from "svelte";
     import { type Group } from "./stores";
-    import { WindowGetSize } from "../wailsjs/runtime"
 
     let canvas: HTMLCanvasElement
     let c: CanvasRenderingContext2D;
@@ -10,7 +9,6 @@
 
     let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
     let vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
-
     
     onMount(async () => {
         c = canvas.getContext('2d')
