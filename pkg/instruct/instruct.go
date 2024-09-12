@@ -44,3 +44,12 @@ func (i *InstructionBoard) GetNewInstruct() *Instruct {
 	instruct := <-i.Channel
 	return instruct
 }
+
+func (i *InstructionBoard) ReceiveInstruct() *Instruct {
+	select {
+	case instruct := <-i.Channel:
+		return instruct
+	default:
+		return &Instruct{Message: "No message received", State: "info"}
+	}
+}
