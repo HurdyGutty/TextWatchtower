@@ -2,25 +2,20 @@ import { writable } from 'svelte/store';
 import { ReceiveInstruct } from "../wailsjs/go/instruct/instructionBoard"
 import { instruct } from '../wailsjs/go/models';
 
-let instructStruct: Promise<instruct.Instruct>
-
-function fetchInstruct() {
-    instructStruct = ReceiveInstruct()
+let instructStruct: instruct.Instruct = {
+    message: "Welcome to Text Watchtower! Let's start by creating a group",
+    state: "info"
 }
 
-fetchInstruct()
-
-const messageStore = writable(instructStruct, () => {
-    let interval = setInterval(() => {
-        messageStore.update((value) => (value = ReceiveInstruct()))
-    }, 2000)
-
-    return () => {
-        clearInterval(interval)
-    }
-});
+const messages = writable(instructStruct);
+	const evtSource = new EventSource("http://localhost:12345/events");
+	evtSource.onmessage = function(event) {
+		console.log(event);
+		var dataobj = JSON.parse(event.data) as instruct.Instruct;
+		messages.set(dataobj);
+	}
 
 export default {
-	subscribe: messageStore.subscribe,
+	subscribe: messages.subscribe,
 }
 
