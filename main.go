@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/HurdyGutty/go_OCR/pkg/OCR"
+	sse "github.com/HurdyGutty/go_OCR/pkg/SSE"
 	"github.com/HurdyGutty/go_OCR/pkg/captureGroup"
 	"github.com/HurdyGutty/go_OCR/pkg/instruct"
 	"github.com/HurdyGutty/go_OCR/pkg/telegram"
@@ -41,6 +42,11 @@ func main() {
 	app.instructBoard = instructBoard
 	captureGroup.InstructionBoard = instructBoard
 	OCR.InstructionBoard = instructBoard
+	sse.InstructBoard = instructBoard
+
+	go func() {
+		sse.Serve()
+	}()
 
 	// Create application with options
 	err := wails.Run(&options.App{
