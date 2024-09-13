@@ -6,17 +6,17 @@
   // import Test from "./Test.svelte";
   import { type Group } from "./stores";
   import { onMount } from "svelte";
-  import { drawFunction } from "./drawFn"
+  import { type DrawFn, type ClearFn ,drawFunction ,clearFunction } from "./drawFn"
 
   let canvas: Canvas
-  let board: InstructionBoard
-  let drawCanvasFn: (group: Group) => void
-  let updateBoardFn: () => void
+  let drawCanvasFn: DrawFn
+  let clearFn: ClearFn
 
   onMount(() => {
     drawCanvasFn = canvas.drawCanvas
+    clearFn = canvas.clearCanvas
     drawFunction.set(drawCanvasFn)
-    updateBoardFn = board.updateInstructionBoard
+    clearFunction.set(clearFn)
   })
 
 
@@ -24,7 +24,7 @@
 
 <div>
   <Title/>
-  <InstructionBoard bind:this={board}/>
+  <InstructionBoard/>
   <GroupContainer/>
   <Canvas bind:this={canvas}/>
   <!-- <Test drawCanvasFn={drawCanvasFn}/> -->
