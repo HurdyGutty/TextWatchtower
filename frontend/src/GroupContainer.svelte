@@ -2,6 +2,7 @@
     import { NewCaptureGroup, DeleteGroup } from "../wailsjs/go/main/App";
     import { InstructionAlert, InstructionError, InstructionInfo } from "../wailsjs/go/instruct/instructionBoard.js";
     import { type Group, groupsMap } from "./stores.js"
+    import { clearFunction, type ClearFn } from "./drawFn"
     import WatchGroup from "./WatchGroup.svelte";
     let numberQueue = [1,2,3,4,5,6]
     let groups: Map<number, Group>;
@@ -10,8 +11,11 @@
         groups = value;
     })
 
+    let clearCanvas: ClearFn
 
-
+    clearFunction.subscribe((func) => {
+        clearCanvas = func
+    })
 
     function addNewGroup(e: Event) {
         e.preventDefault();
@@ -23,6 +27,7 @@
         numberQueue = numberQueue
         NewCaptureGroup(id);
         groups = groups.set(id, {id})
+        clearCanvas()
         InstructionInfo("Added a new group")
     }
 
@@ -40,6 +45,7 @@
         numberQueue = numberQueue
         groups.delete(id)
         groups = groups
+        clearCanvas()
         InstructionInfo(`Delete Group ${deletedId}`)
     }
 
