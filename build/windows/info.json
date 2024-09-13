@@ -1,10 +1,10 @@
 {
 	"fixed": {
-		"file_version": "0.5"
+		"file_version": "0.7"
 	},
 	"info": {
 		"0000": {
-			"ProductVersion": "0.5.0",
+			"ProductVersion": "0.7.0",
 			"CompanyName": "Hurdy Co.",
 			"FileDescription": "Watch changes of texts in websites",
 			"LegalCopyright": "@ 2024 Hurdy Corporation. All rights reserved",
