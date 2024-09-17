@@ -1,18 +1,28 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { type Group } from "./stores";
+    import { GetAppHeight, GetAppWidth } from "../wailsjs/go/main/App";
 
     let canvas: HTMLCanvasElement
     let c: CanvasRenderingContext2D;
     let elementRect: DOMRect
     const radius = 10
 
-    let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
-    let vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
-    
+    const scale = window.devicePixelRatio;
+
     onMount(async () => {
         c = canvas.getContext('2d')
         elementRect = canvas.getBoundingClientRect()
+        let appWidth = await GetAppWidth()
+        let appHeight = await GetAppHeight()
+        let vw = Math.floor(appWidth / scale)
+        let vh = Math.floor(appHeight / scale)
+
+        canvas.style.width = `${vw}px`;
+        canvas.style.height = `${vh}px`;
+        
+        canvas.width = appWidth
+        canvas.height = appHeight
     })
 
     export function clearCanvas() {
@@ -28,6 +38,7 @@
             c.lineJoin = "bevel";
             c.strokeStyle = "#38f";
             c.strokeRect(group.watchBox.x - elementRect.left - 1, group.watchBox.y - elementRect.top - 1, group.watchBox.w, group.watchBox.h)
+
         }
         if ("reload" in group) {
             c.beginPath();
@@ -39,7 +50,7 @@
 
 </script>
 
-<canvas bind:this={canvas} width={vw} height={vh}></canvas>
+<canvas bind:this={canvas}></canvas>
 
 <style>
     canvas {

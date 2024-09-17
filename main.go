@@ -34,10 +34,16 @@ func main() {
 	telegram.Token = os.Getenv("TELEGRAM_BOT_TOKEN")
 	telegram.Chat_ID = os.Getenv("GROUP_ID")
 
+	hDC := win.GetDC(0)
+	defer win.ReleaseDC(0, hDC)
+	width := int(win.GetDeviceCaps(hDC, win.HORZRES))
+	height := int(win.GetDeviceCaps(hDC, win.VERTRES))
+
 	// Create an instance of the app structure
 	app := NewApp()
-	app.Width = int(win.GetSystemMetrics(win.SM_CXSCREEN))
-	app.Height = int(win.GetSystemMetrics(win.SM_CYSCREEN))
+	app.Width = width
+	app.Height = height
+
 	instructBoard := instruct.NewInstructBoard()
 	app.instructBoard = instructBoard
 	captureGroup.InstructionBoard = instructBoard
@@ -51,8 +57,8 @@ func main() {
 	// Create application with options
 	err := wails.Run(&options.App{
 		Title:  "Text Watchtower",
-		Width:  int(win.GetSystemMetrics(win.SM_CXSCREEN)),
-		Height: int(win.GetSystemMetrics(win.SM_CYSCREEN)),
+		Width:  width,
+		Height: height,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
