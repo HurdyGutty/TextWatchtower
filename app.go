@@ -17,21 +17,6 @@ type App struct {
 	Height        int `json:"height"`
 }
 
-type RandomImage struct {
-	Message string
-	Status  string
-}
-
-type AllBreeds struct {
-	Message map[string]map[string][]string
-	Status  string
-}
-
-type ImagesByBreed struct {
-	Message []string
-	Status  string
-}
-
 type CaptureGroupState struct {
 	group    *captureGroup.CaptureGroup
 	stopChan chan bool

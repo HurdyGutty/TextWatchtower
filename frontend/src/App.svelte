@@ -4,7 +4,6 @@
   import GroupContainer from "./GroupContainer.svelte"
   import Title from "./Title.svelte"
   // import Test from "./Test.svelte";
-  import { type Group } from "./stores";
   import { onMount } from "svelte";
   import { type DrawFn, type ClearFn ,drawFunction ,clearFunction } from "./drawFn"
 
