@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/HurdyGutty/go_OCR/pkg/captureGroup"
 	"github.com/HurdyGutty/go_OCR/pkg/instruct"
@@ -45,6 +46,21 @@ func (a *App) NewCaptureGroup(id int) {
 		group:    newGroup,
 		stopChan: nil,
 	}
+}
+
+func (a *App) ChangeName(id int, name string) {
+	group := Groups[id].group
+	group.ChangeName(name)
+}
+func (a *App) ChangeMin(id int, min int) {
+	group := Groups[id].group
+	group.ChangeMin(min)
+	fmt.Printf("%+v", group)
+}
+func (a *App) ChangeMax(id int, max int) {
+	group := Groups[id].group
+	group.ChangeMax(max)
+	fmt.Printf("%+v", group)
 }
 
 func (a *App) AssignReloadButton(id int) *reloadPoint.MousePoint {

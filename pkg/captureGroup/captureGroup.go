@@ -3,6 +3,7 @@ package captureGroup
 import (
 	"embed"
 	"fmt"
+	"math/rand"
 	"os"
 	"runtime"
 	"strconv"
@@ -57,12 +58,27 @@ func (textBox *ScreenBoxText) changeText(newText string) {
 
 type CaptureGroup struct {
 	Id        int
+	Name      string
 	Reload    *reloadPoint.MousePoint
 	TextBoxes []ScreenBoxText
+	Min       int
+	Max       int
 }
 
 func NewCaptureGroup(id int) *CaptureGroup {
-	return &CaptureGroup{Id: id}
+	return &CaptureGroup{Id: id, Name: fmt.Sprintf("Group %d", id), Min: 15, Max: 15}
+}
+
+func (group *CaptureGroup) ChangeMin(min int) {
+	group.Min = min
+}
+
+func (group *CaptureGroup) ChangeMax(max int) {
+	group.Max = max
+}
+
+func (group *CaptureGroup) ChangeName(name string) {
+	group.Name = name
 }
 
 func (group *CaptureGroup) AddReloadPoint(mousePoint *reloadPoint.MousePoint) {
@@ -86,34 +102,38 @@ func (group *CaptureGroup) DeleteCaptureGroup() (int, error) {
 	return group.Id, nil
 }
 
+func (group *CaptureGroup) getRandomTime() int64 {
+	return int64((group.Min + rand.Intn((group.Max - group.Min))) * 1000)
+}
+
 func (group *CaptureGroup) Overwatch() chan bool {
-	ticker := time.NewTicker(15000 * time.Millisecond)
+	ticker := time.NewTicker(time.Duration(group.getRandomTime()) * time.Millisecond)
 	done := make(chan bool, 1)
 	groupPath := "group" + strconv.Itoa(group.Id) + "/"
 	err := os.MkdirAll("images/"+groupPath, 0750)
 	if err != nil {
 		InstructionBoard.InstructionError("Can't make new capture group")
 	}
-
+	InstructionBoard.InstructionInfo(fmt.Sprintf("%s has started watching", group.Name))
 	go func() {
 		for {
 			select {
 			case <-done:
 				ticker.Stop()
-				InstructionBoard.InstructionAlert(fmt.Sprintf("Group %d has stop", group.Id))
+				InstructionBoard.InstructionAlert(fmt.Sprintf("%s has stop", group.Name))
 				return
 			case t := <-ticker.C:
 				for i, textBox := range group.TextBoxes {
 					imageName := groupPath + "Capture" + strconv.Itoa(i)
 					newText := textBox.getNewText(imageName)
 					if textBox.isNewText(newText) {
-						sent, err := telegram.SendMessage(t, newText)
+						sent, err := telegram.SendMessage(t, fmt.Sprintf("%s: %s", group.Name, newText))
 						if err != nil {
 							InstructionBoard.InstructionError("Can't sent telegram messages")
 						}
 						if sent {
 							group.TextBoxes[i].changeText(newText)
-							InstructionBoard.InstructionAlert(fmt.Sprintf("Group %d changes have been sent", group.Id))
+							InstructionBoard.InstructionAlert(fmt.Sprintf("%s changes have been sent", group.Name))
 						}
 					}
 				}
