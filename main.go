@@ -28,12 +28,6 @@ var tesseract embed.FS
 
 func main() {
 	captureGroup.TrainingData = tesseract
-	errorLoad := godotenv.Load()
-	if errorLoad != nil {
-		log.Fatal("Error loading .env file")
-	}
-	telegram.Token = os.Getenv("TELEGRAM_BOT_TOKEN")
-	telegram.Chat_ID = os.Getenv("GROUP_ID")
 
 	hDC := win.GetDC(0)
 	defer win.ReleaseDC(0, hDC)
@@ -56,6 +50,12 @@ func main() {
 		sse.Serve()
 	}()
 	runEnv.ChangeEnv()
+	errorLoad := godotenv.Load()
+	if errorLoad != nil {
+		log.Fatal("Error loading .env file")
+	}
+	telegram.Token = os.Getenv("TELEGRAM_BOT_TOKEN")
+	telegram.Chat_ID = os.Getenv("GROUP_ID")
 
 	// Create application with options
 	err := wails.Run(&options.App{
