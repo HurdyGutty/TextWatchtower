@@ -2,17 +2,37 @@
     import { type Group } from "./stores";
     import GroupMenu from "./GroupMenu.svelte";
     import { type DrawFn, drawFunction } from "./drawFn";
-    import { StartOverwatch, StopOverwatch } from "../wailsjs/go/main/App";
+    import { ChangeName, StartOverwatch, StopOverwatch } from "../wailsjs/go/main/App";
+    import { createEventDispatcher } from 'svelte';
+    import Input from "./Input.svelte";
+    import { InstructionAlert } from "../wailsjs/go/instruct/instructionBoard";
+    import GroupName from "./GroupName.svelte";
+
+    const dispatch = createEventDispatcher();
 
     export let group: Group
     export let deleteGroup: (e: Event, id: number) => void;
     let drawFn: DrawFn;
+    let rename = false;
+    let name = group.name;
 
     drawFunction.subscribe((value) => {
         drawFn = value;
     })
     let play = true;
     let showMenu = true;
+
+    function toggleRename() {
+        rename = !rename
+    }
+
+    function handleNameSubmit(e: Event) {
+        e.preventDefault();
+        group.name = name;
+        ChangeName(group.id, name)
+        toggleRename()
+        InstructionAlert(`Changed name to ${group.name}`)
+    }
 
     function togglePlay() {
         play = !play
@@ -39,7 +59,20 @@
     on:keyup={() => drawFn(group)}
     role="button"
     tabindex="0">
-        <span>Group {group.id}</span>
+        {#if !rename}
+        <GroupName {group} {toggleRename}/>
+        {:else}
+        <Input 
+            id="name"
+            type="text" 
+            placeholder={name} 
+            bind:value={name} 
+            on:submit={handleNameSubmit}
+        />
+        {/if}
+
+        
+
         <button on:click={toggleMenu}>
             <img src="/assets/images/menu.svg" alt="Menu"/>
         </button>
@@ -88,11 +121,8 @@
         text-align: center;
         justify-content: space-evenly;
     }
-    .group span {
-        flex-grow: 0.6;
-        font-weight: bold;
-    }
     img {
         max-height: 1.5rem;
     }
+
 </style>
