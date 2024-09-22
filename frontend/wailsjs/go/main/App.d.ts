@@ -7,6 +7,12 @@ export function AddNewScreenBox(arg1:number):Promise<screenBox.ScreenBox>;
 
 export function AssignReloadButton(arg1:number):Promise<reloadPoint.MousePoint>;
 
+export function ChangeMax(arg1:number,arg2:number):Promise<void>;
+
+export function ChangeMin(arg1:number,arg2:number):Promise<void>;
+
+export function ChangeName(arg1:number,arg2:string):Promise<void>;
+
 export function DeleteGroup(arg1:number):Promise<number>;
 
 export function GetAppHeight():Promise<number>;

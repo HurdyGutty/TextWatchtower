@@ -10,6 +10,18 @@ export function AssignReloadButton(arg1) {
   return window['go']['main']['App']['AssignReloadButton'](arg1);
 }
 
+export function ChangeMax(arg1, arg2) {
+  return window['go']['main']['App']['ChangeMax'](arg1, arg2);
+}
+
+export function ChangeMin(arg1, arg2) {
+  return window['go']['main']['App']['ChangeMin'](arg1, arg2);
+}
+
+export function ChangeName(arg1, arg2) {
+  return window['go']['main']['App']['ChangeName'](arg1, arg2);
+}
+
 export function DeleteGroup(arg1) {
   return window['go']['main']['App']['DeleteGroup'](arg1);
 }
