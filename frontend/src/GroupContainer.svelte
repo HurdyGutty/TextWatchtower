@@ -26,7 +26,7 @@
         let id = numberQueue.shift()
         numberQueue = numberQueue
         NewCaptureGroup(id);
-        groups = groups.set(id, {id})
+        groups = groups.set(id, {id, name: `Group ${id}`, min: 15, max: 15 })
         clearCanvas()
         InstructionInfo("Added a new group")
     }
